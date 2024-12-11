@@ -41,11 +41,12 @@ app.use(express.json()); // For parsing JSON request bodies
 
 // Proxy route
 app.all('/api*', async (req, res) => {
+    const proxyOrigin = 'http://darex-realty.vampfi.com'
     try {
         // Modify headers, including the Origin header
         const modifiedHeaders = {
             ...req.headers,
-            Origin: 'http://darex-realty.vampfi.com', // Set your desired origin
+            Origin: proxyOrigin, // Set your desired origin
         };
         // const uri  =`http://stagingapi.vampfi.com/api${req.path.replace('/api', '/auth/create-password')}` // Adjust the backend URL
         // const uri = 'http://localhost:4000/app:v1/user/login'
