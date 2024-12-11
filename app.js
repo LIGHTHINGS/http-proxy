@@ -43,27 +43,11 @@ app.use(express.json()); // For parsing JSON request bodies
 app.all('/api*', async (req, res) => {
     const proxyOrigin = 'http://darex-realty.vampfi.com'
     try {
-        // Modify headers, including the Origin header
-        const modifiedHeaders = {
-            ...req.headers,
-            Origin: proxyOrigin, // Set your desired origin
-        };
-        // const uri  =`http://stagingapi.vampfi.com/api${req.path.replace('/api', '/auth/create-password')}` // Adjust the backend URL
-        // const uri = 'http://localhost:4000/app:v1/user/login'
-        // console.log(uri)
-        // Forward the request using Axios
-        // const backendResponse = await axios({
-        //     method: req.method,
-        //     url: uri, // Adjust the backend URL
-        //     // headers: modifiedHeaders,
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: req.body, // Include request body
-        //     timeout: 10000
-        //     // params: req.query, // Include query parameters
-        // });
         const subroute = req.path.split('api')[1];
+        console.log(subroute)
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subroute}`, req.body, {
             headers: { 'Content-Type': 'application/json', 'Origin': 'http://darex-realty.vampfi.com' },
+            timeout: 10000
         });
         // Send the backend's response to the client
         res.status(backendResponse.status).send(backendResponse.data);
