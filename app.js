@@ -44,7 +44,6 @@ app.all('/api*', async (req, res) => {
     const proxyOrigin = 'http://darex-realty.vampfi.com'
     try {
         const subroute = req.path.split('api')[1];
-        console.log(subroute)
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subroute}`, req.body, {
             headers: { 'Content-Type': 'application/json', 'Origin': 'http://darex-realty.vampfi.com' },
             timeout: 10000
