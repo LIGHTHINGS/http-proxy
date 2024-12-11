@@ -43,8 +43,8 @@ app.use(express.json()); // For parsing JSON request bodies
 app.all('/api*', async (req, res) => {
     const proxyOrigin = 'http://darex-realty.vampfi.com'
     try {
-        const subroute = req.path.split('api')[1];
-        const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subroute}`, req.body, {
+        const subRoute = req.path.split('api')[1];
+        const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
             headers: { 'Content-Type': 'application/json', 'Origin': proxyOrigin },
             timeout: 10000
         });
