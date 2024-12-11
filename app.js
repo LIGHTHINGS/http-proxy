@@ -60,12 +60,11 @@ app.all('/api*', async (req, res) => {
         //     timeout: 10000
         //     // params: req.query, // Include query parameters
         // });
-        console.log(req.body)
-        const backendResponse =  await axios.post('http://stagingapi.vampfi.com/api/auth/create-password/', req.body, {
+        const subroute = req.path.split('api')[1];
+        const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subroute}`, req.body, {
             headers: { 'Content-Type': 'application/json', 'Origin': 'http://darex-realty.vampfi.com' },
         });
         // Send the backend's response to the client
-        console.log(backendResponse.data)
         res.status(backendResponse.status).send(backendResponse.data);
     } catch (error) {
         // Handle errors from the backend
