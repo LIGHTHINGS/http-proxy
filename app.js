@@ -13,6 +13,7 @@ app.use(cors({
 // Proxy route
 app.all('/api*', async (req, res) => {
     const proxyOrigin = process.env.Origin;
+
     try {
         const subRoute = req.path.split('api')[1];
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
