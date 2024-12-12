@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-
+require('dotenv').config()
 
 const app = express();
 app.use(express.json());// For parsing JSON request bodies
@@ -12,7 +12,7 @@ app.use(cors({
 // app.use()
 // Proxy route
 app.all('/api*', async (req, res) => {
-    const proxyOrigin = 'http://darex-realty.vampfi.com';
+    const proxyOrigin = process.env.Origin;
     try {
         const subRoute = req.path.split('api')[1];
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
