@@ -13,7 +13,6 @@ app.use(cors({
 // Proxy route
 app.all('/api*', async (req, res) => {
     const proxyOrigin = process.env.Origin;
-
     try {
         const subRoute = req.path.split('api')[1];
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
@@ -25,7 +24,7 @@ app.all('/api*', async (req, res) => {
     } catch (error) {
         // Handle errors from the backend
         console.error('Error forwarding request:', error.message);
-        res.status(error.response?.status || 500).send(error.response?.data || { error: 'Internal Server Error' });
+        res.status(error.response?.status || 500).send(error || { error: 'Internal Server Error' });
     }
 });
 
