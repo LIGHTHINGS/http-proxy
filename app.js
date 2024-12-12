@@ -1,47 +1,18 @@
-// const { createProxyMiddleware } = require('http-proxy-middleware');
-// const express = require('express');
-// const axios = require('axios')
-
-// const app = express();
-// app.use(express.json())
-
-// // const proxy = createProxyMiddleware({
-// //     // target: 'http://stagingapi.vampfi.com/api'
-// //     target: 'http://localhost:4000/app:v1/user',
-// //     changeOrigin: true,
-// //     onProxyReq: (proxyReq, req, res) => {
-// //         proxyReq.setHeader('Origin', 'http://darex-realty.vampfi.com');
-// //         if (req.body) {
-// //             const bodyData = JSON.stringify(req.body);
-// //             proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-// //             proxyReq.write(bodyData);
-// //             console.log(bodyData);
-
-// //             console.log(res)
-// //         }
-// //     },
-// // });
-
-
-// app.use('/test', (req, res, next) =>{
-//     console.log(req.body)
-    
-// });
-
-// app.listen(3001, () => {
-//     console.log('Proxy running on http://localhost:3001');
-// });
-
-
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
+
 
 const app = express();
-app.use(express.json()); // For parsing JSON request bodies
-
+app.use(express.json());// For parsing JSON request bodies
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: '*'
+}))
+// app.use()
 // Proxy route
 app.all('/api*', async (req, res) => {
-    const proxyOrigin = 'http://darex-realty.vampfi.com'
+    const proxyOrigin = 'http://darex-realty.vampfi.com';
     try {
         const subRoute = req.path.split('api')[1];
         const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
