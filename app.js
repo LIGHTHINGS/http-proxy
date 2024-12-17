@@ -16,16 +16,17 @@ app.use(cors({
 app.all('/api*', upload.any(), async (req, res) => {
     const proxyOrigin = process.env.Origin;
     const token  = req.headers['authorization'].split(' ')[1]
-    console.log(req.body)
     try {
         const subRoute = req.path.split('api')[1];
-        const backendResponse =  await axios[`${req.method.toLowerCase()}`](`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
+        const backendResponse =  await axios[`${req.method.toLowerCase()}`](`http://stagingapi.vampfi.com/api${subRoute}`,{
+            params: req.query
+        },{
             headers: { 
-                'Content-Type': 'application/json',
+                'Content-Type': `${req.headers['content-type'].split(";")[0]}`,
                 'Origin': proxyOrigin,
                 Authorization: `Bearer ${token}`
             },
-            timeout: 10000
+            timeout: 10000,
         });
         // Send the backend's response to the client
         res.status(backendResponse.status).send(backendResponse.data);
