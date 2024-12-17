@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 require('dotenv').config()
+const multer = require('multer');
+const upload = multer();
 
 const app = express();
 app.use(express.json());// For parsing JSON request bodies
@@ -11,12 +13,13 @@ app.use(cors({
 }))
 // app.use()
 // Proxy route
-app.all('/api*', async (req, res) => {
+app.all('/api*', upload.any(), async (req, res) => {
     const proxyOrigin = process.env.Origin;
-    const token  = req.headers['Authorization'].split('')[1]
+    const token  = req.headers['authorization'].split(' ')[1]
+    console.log(req.body)
     try {
         const subRoute = req.path.split('api')[1];
-        const backendResponse =  await axios.post(`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
+        const backendResponse =  await axios[`${req.method.toLowerCase()}`](`http://stagingapi.vampfi.com/api${subRoute}`, req.body, {
             headers: { 
                 'Content-Type': 'application/json',
                 'Origin': proxyOrigin,
